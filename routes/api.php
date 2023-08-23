@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -23,6 +24,11 @@ Route::controller(UserController::class)->prefix('user')->group(function(){
     Route::post('login', 'login');
 });
 
+Route::controller(FileController::class)->middleware('auth:sanctum')->prefix('file')->group(function(){
+    Route::post('upload', 'upload');
+    Route::post('delete/{id}', 'delete');
+    Route::post('download/{id}', 'download');
+});
 
 /***
  * Route::controller(TodoItemController::class)->prefix('item')->group(function(){

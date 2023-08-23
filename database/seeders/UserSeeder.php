@@ -19,5 +19,13 @@ class UserSeeder extends Seeder
                 'password'=> bcrypt('123456')
             ]
         );
+
+        \App\Models\User::factory()->create(
+            [
+                'name' => 'Yigit Ozdemir',
+                'email' => 'yigit2@yigitnot.com',
+                'password'=> bcrypt('123456')
+            ]
+        );
     }
 }
