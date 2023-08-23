@@ -4,6 +4,7 @@ use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,11 @@ Route::controller(FileController::class)->middleware('auth:sanctum')->prefix('fi
     Route::post('upload', 'upload');
     Route::post('delete/{id}', 'delete');
     Route::post('download/{id}', 'download');
+    Route::post('metadata/{id}', 'metadata');
+});
+
+Route::controller(PermissionController::class)->middleware('auth:sanctum')->prefix('permission')->group(function(){
+    Route::post('create', 'create');
 });
 
 /***

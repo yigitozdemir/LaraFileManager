@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\Permission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -57,10 +58,16 @@ class FileController extends Controller
     {
         $fID = $request->id;
         $file = File::find($fID)->first();
+        $permission = Permission::where('file_id', '=', $fID)->where('user_id', '=', auth('sanctum')->user()->id)->first();
+        
 
         if($file->owner_id == auth('sanctum')->user()->id)
         {
             return Storage::download('files/' . $file->physical_path);
+        }
+        elseif( $permission->permission == 'rd' )
+        {
+            return response()->json($file);
         }
         else
         {
@@ -70,5 +77,29 @@ class FileController extends Controller
             ));
         }
         
+    }
+
+    public function metadata(Request $request): JsonResponse{
+        $fID = $request->id;
+        $file = File::find($fID)->first();
+        $permission = Permission::where('file_id', '=', $fID)->where('user_id', '=', auth('sanctum')->user()->id)->first();
+
+        //return response()->json($permission);
+
+        if($file->owner_id == auth('sanctum')->user()->id)
+        {
+            return response()->json($file);
+        }
+        elseif( $permission->permission == 'ro' || $permission->permission == 'rd' )
+        {
+            return response()->json($file);
+        }
+        else
+        {
+            return response()->json(array(
+                'result' => 'failed',
+                'reason' => 'NO_PERMISSION'
+            ));
+        }
     }
 }

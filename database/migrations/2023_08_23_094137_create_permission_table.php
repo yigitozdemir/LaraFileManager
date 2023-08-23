@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('permission', 5);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
